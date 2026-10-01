@@ -28,5 +28,7 @@ Yo que llevo, enterrados tantos sueños,
 Yo que guardo, tantas tumbas en el alma
    RE7                  SOL     SOL-FA-MI
 No se, porque sollozo y tiemblo
-     LAm      RE7                   SOL    RE7-SOL
+     LAm      RE7                   SOL
 Al cavar, una mas, una mas en mis entrañas
+
+RE7-SOL

@@ -1,6 +1,8 @@
 (Intro)
-MI7              DO DOm               SOL-FA-MI7 LAm RE7 SOL-SOLdim-LAm-RE7
+MI7              DO DOm               SOL-FA-MI7
 Usted... me desespera, me mata me enloquece
+
+LAm RE7 SOL-SOLdim-LAm-RE7
 
                SOL
 Usted es la culpable

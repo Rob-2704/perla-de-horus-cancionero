@@ -91,7 +91,7 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            opacity: 0.18; /* Ajusta la transparencia aquí */
+            opacity: 0.18;
             pointer-events: none;
             z-index: 0;
         }
@@ -158,7 +158,7 @@
         
         /* Modales y Cajas Emergentes */
         .caja-acorde-emergente { 
-            position: fixed; /* 'fixed' simplifica el cálculo de posición relativo a la pantalla */
+            position: fixed; 
             display: none; 
             background: #1a1a1a;
             border: 1px solid #333;
@@ -166,7 +166,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
             padding: 12px; 
             z-index: 1000; 
-            width: min(220px, 80vw); /* Ancho adaptable */
+            width: fit-content; /* Se ajusta exactamente al ancho del diagrama */
             max-width: 90vw;
             text-align: center;
             color: #e0e0e0;
@@ -186,14 +186,6 @@
             align-items: center;
             width: 100%;
             margin: 5px 0 0 0;
-        }
-
-        /* 1. SOLUCIÓN TAMAÑO DE DIAGRAMA: Escala el SVG del acorde dinámicamente */
-        #wrapper-render svg {
-            width: 100% !important;
-            height: auto !important;
-            max-width: 170px;
-            max-height: 200px;
         }
         
         /* Panel Flotante y Controles */
@@ -298,14 +290,16 @@
             font-family: monospace;
         }
 
-        /* Reducción de diagramas en móviles */
+        /* Reducción de relleno y bordes en móviles */
         @media (max-width: 600px) {
             .caja-acorde-emergente {
-                padding: 8px;
+                padding: 8px 12px;
+                border-radius: 10px;
             }
-            #wrapper-render svg {
-                max-width: 130px;
-                max-height: 150px;
+
+            .caja-acorde-emergente h4 {
+                font-size: 14px;
+                margin-bottom: 2px;
             }
         }
         
@@ -400,42 +394,6 @@
 
         const letraCancionDiv = document.getElementById('letra-cancion');
 
-        // 2. SOLUCIÓN REPOSICIONAMIENTO EN PANTALLA:
-        // Ajusta las coordenadas de la caja flotante para que siempre quede visible
-        function reposicionarCajaAcorde(e, cajaModal) {
-            cajaModal.style.display = 'block';
-
-            const rectModal = cajaModal.getBoundingClientRect();
-            const padding = 12;
-
-            // Intenta posicionarlo ligeramente arriba/derecha de donde se hizo clic/toque
-            let left = e.clientX + 10;
-            let top = e.clientY - rectModal.height - 10;
-
-            // Si se sale por arriba, mostrarlo abajo del cursor/dedo
-            if (top < padding) {
-                top = e.clientY + 20;
-            }
-
-            // Si se sale por abajo de la ventana
-            if (top + rectModal.height > window.innerHeight - padding) {
-                top = window.innerHeight - rectModal.height - padding;
-            }
-
-            // Si se sale por la derecha
-            if (left + rectModal.width > window.innerWidth - padding) {
-                left = window.innerWidth - rectModal.width - padding;
-            }
-
-            // Si se sale por la izquierda
-            if (left < padding) {
-                left = padding;
-            }
-
-            cajaModal.style.left = `${left}px`;
-            cajaModal.style.top = `${top}px`;
-        }
-
         async function cargarPlantilla() {
             if(!idC) {
                 letraCancionDiv.textContent = "Error: No se definió el identificador de la canción.";
@@ -451,20 +409,7 @@
 
                 // 1. Procesamiento e inyección de la letra y acordes interactivos
                 letraCancionDiv.innerHTML = procesarLetraYAcordes(data.contenido);
-                
-                // Inicializa el modal
                 inicializarModalAcordes('caja-acorde');
-
-                // Listener global/delegado para recalcular posición al hacer clic en cualquier acorde
-                const cajaModal = document.getElementById('caja-acorde');
-                document.addEventListener('click', (e) => {
-                    const enlaceAcorde = e.target.closest('.acorde-link');
-                    if (enlaceAcorde) {
-                        setTimeout(() => reposicionarCajaAcorde(e, cajaModal), 10);
-                    } else if (!e.target.closest('#caja-acorde')) {
-                        cajaModal.style.display = 'none';
-                    }
-                });
 
                 // 2. LLAMADA MODULAR AL REPRODUCTOR
                 const datosContexto = { nombreC: data.nombreC };

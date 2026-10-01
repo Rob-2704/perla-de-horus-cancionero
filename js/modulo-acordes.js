@@ -127,8 +127,6 @@ export function inicializarModalAcordes(cajaId) {
     });
 }
 
-// Remplaza las funciones abrirCajaAcorde y dibujarAcordeCanvasExpandido en tu modulo-acordes.js
-
 function abrirCajaAcorde(nombreAcordeRaw, evento, caja) {
     const titulo = document.getElementById('acorde-titulo');
     const badgeorigen = document.getElementById('origen-acorde-modal');
@@ -287,24 +285,24 @@ function abrirCajaAcorde(nombreAcordeRaw, evento, caja) {
     }
 
     // --- POSICIONAMIENTO UNIVERSAL PARA MÓVILES Y COMPUTADORAS ---
-    // En móviles centramos la caja en la pantalla si el espacio es reducido
     const esMovil = window.innerWidth <= 600;
     const rect = caja.getBoundingClientRect();
     const padding = 12;
 
     if (esMovil) {
-        // En celulares: centrar horizontalmente y colocar cerca de la zona tocada
+        // En celulares: centrar horizontalmente usando el ancho ajustado y colocar cerca del toque
         let left = (window.innerWidth - rect.width) / 2;
-        let top = evento.clientY ? (evento.clientY - rect.height - 20) : (window.innerHeight / 3);
+        let top = evento.clientY ? (evento.clientY - rect.height - 15) : (window.innerHeight / 3);
 
+        // Si se sale arriba o abajo en la pantalla del celular, centrar verticalmente
         if (top < padding || top + rect.height > window.innerHeight - padding) {
-            top = (window.innerHeight - rect.height) / 2; // Centrado total si no cabe arriba/abajo
+            top = Math.max(padding, (window.innerHeight - rect.height) / 2);
         }
 
         caja.style.left = `${Math.max(padding, left)}px`;
-        caja.style.top = `${Math.max(padding, top)}px`;
+        caja.style.top = `${top}px`;
     } else {
-        // En PC: posicionamiento flotante dinámico junto al cursor
+        // En PC: flotante dinámico junto al cursor
         let clientX = evento.clientX || (evento.touches && evento.touches[0].clientX) || 100;
         let clientY = evento.clientY || (evento.touches && evento.touches[0].clientY) || 100;
 
@@ -324,11 +322,10 @@ function abrirCajaAcorde(nombreAcordeRaw, evento, caja) {
 function dibujarAcordeCanvasExpandido(wrapper, datos) {
     wrapper.innerHTML = ""; 
 
-    // Ajuste dinámico de la resolución según la pantalla
     const esMovil = window.innerWidth <= 600;
     const canvas = document.createElement('canvas');
     
-    // Dimensiones en px lógicos (menores en móviles)
+    // Dimensiones dinámicas según el dispositivo
     const anchoCanvas = esMovil ? 110 : 140;
     const altoCanvas = esMovil ? 120 : 150;
     

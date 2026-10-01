@@ -76,6 +76,8 @@
             width: 100%;
             overflow: hidden; /* Mantiene la marca de agua dentro de los bordes redondeados */
             z-index: 1;
+            display: flex;
+            justify-content: center; /* Centra el bloque de texto horizontalmente */
         }
 
         /* Marca de agua sólo en el contenedor de la letra */
@@ -96,18 +98,20 @@
             z-index: 0;
         }
         
+        /* Bloque de texto de la letra */
         .letra-texto { 
             position: relative;
             z-index: 1; /* Mantiene el texto por encima del fondo */
-            display: block;
+            display: inline-block; /* Hace que el ancho sea el de la línea más larga */
+            margin: 0 auto;        /* Centra el bloque de palabras en la tarjeta */
             font-family: 'Sono', monospace;
             font-variation-settings: 'MONO' 1;
             font-size: clamp(10px, 1.3vw, 16px);
             color: #3a3a3a;
-            margin: 0;
             white-space: pre;
             overflow-x: auto;
-            width: 100%;
+            text-align: left;      /* Conserva la alineación del texto a la izquierda */
+            max-width: 100%;
         }
         
         .acorde-link { 
@@ -156,24 +160,25 @@
             border: 0; 
         }
         
-        /* Modales y Cajas Emergentes */
+        /* Modales y Cajas Emergentes Ajustados */
         .caja-acorde-emergente { 
-            position: absolute; 
+            position: fixed; /* Cambiado a fixed para cálculo de pantalla preciso */
             display: none; 
             background: #1a1a1a;
             border: 1px solid #333;
             border-radius: 12px; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
-            padding: 15px; 
+            padding: 12px; 
             z-index: 1000; 
-            width: 210px;
+            width: 85vw;       /* Ancho adaptable para celulares */
+            max-width: 200px;  /* Tamaño controlado para pantallas grandes */
             text-align: center;
             color: #e0e0e0;
         }
         
         .caja-acorde-emergente h4 { 
-            margin: 0 0 8px 0; 
-            font-size: 18px; 
+            margin: 0 0 6px 0; 
+            font-size: 16px; 
             color: #fff;
             font-family: 'Sono', sans-serif;
             font-variation-settings: 'MONO' 0;
@@ -184,7 +189,12 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            margin: 10px 0 0 5px;
+            margin: 5px 0 0 0;
+        }
+
+        #wrapper-render svg {
+            max-width: 100%;
+            height: auto;
         }
         
         /* Panel Flotante y Controles */
@@ -379,6 +389,36 @@
         const idC = params.get('idC');
 
         const letraCancionDiv = document.getElementById('letra-cancion');
+
+        // Función global para posicionar la caja sin salirse del viewport
+        window.posicionarCajaEmergente = function(e, caja) {
+            caja.style.display = 'block';
+
+            const rectCaja = caja.getBoundingClientRect();
+            const padding = 12;
+
+            let posX = e.clientX + 10;
+            let posY = e.clientY + 10;
+
+            // Ajuste Horizontal
+            if (posX + rectCaja.width + padding > window.innerWidth) {
+                posX = e.clientX - rectCaja.width - 10;
+            }
+            if (posX < padding) {
+                posX = padding;
+            }
+
+            // Ajuste Vertical
+            if (posY + rectCaja.height + padding > window.innerHeight) {
+                posY = e.clientY - rectCaja.height - 10;
+            }
+            if (posY < padding) {
+                posY = padding;
+            }
+
+            caja.style.left = `${posX}px`;
+            caja.style.top = `${posY}px`;
+        };
 
         async function cargarPlantilla() {
             if(!idC) {

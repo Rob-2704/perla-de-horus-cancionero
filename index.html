@@ -11,7 +11,7 @@
     <title>Cancionero</title>
     <style>
         header {
-            max-width: 700px;
+            max-width: 1000px;
             margin: 0 auto 30px auto;
         }
 
@@ -30,12 +30,27 @@
             margin-bottom: 10px;
         }
 
+        /* Configuración de rejilla adaptativa */
         .lista-canciones {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            max-width: 700px;
+            display: grid;
+            grid-template-columns: 1fr; /* 1 columna por defecto (celulares) */
+            gap: 16px;
+            max-width: 1000px;
             margin: 0 auto;
+        }
+
+        /* Pantallas medianas (tablets / laptops pequeñas): 2 columnas */
+        @media (min-width: 600px) {
+            .lista-canciones {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Pantallas anchas (desktops): 3 columnas */
+        @media (min-width: 900px) {
+            .lista-canciones {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .fila-cancion {
@@ -45,6 +60,9 @@
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
             transition: transform 0.15s, box-shadow 0.15s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .fila-cancion:hover {
@@ -53,7 +71,7 @@
         }
 
         .fila-cancion h2 {
-            margin: 0 0 8px 0;
+            margin: 0 0 12px 0;
             padding-bottom: 8px;
             font-size: 18px;
             font-weight: 600;
@@ -87,7 +105,7 @@
         .fila-cancion .meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
             font-size: 13px;
             color: #999;
         }
@@ -97,6 +115,7 @@
             color: var(--accent);
             padding: 40px;
             font-family: 'Sono', monospace;
+            grid-column: 1 / -1; /* Ocupa todo el ancho si está cargando */
         }
     </style>
 </head>
@@ -143,8 +162,7 @@
                         }
                     } catch (_) { /* si falla, se queda en — */ }
 
-                    // Determina si está terminada según el campo del objeto cancion
-                    // Ajusta 'cancion.terminada' según el nombre exacto de la propiedad en tu backend/API
+                    // Determina si está terminada según la propiedad de la canción
                     const estaTerminada = Boolean(cancion.terminada);
                     const claseEstado = estaTerminada ? 'terminada' : 'pendiente';
                     const tituloEstado = estaTerminada ? 'Canción terminada' : 'Canción pendiente';

@@ -17,8 +17,16 @@
 
         h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 40px; /* Tamaño más grande para el título */
+            font-weight: 700;
             color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 32px; /* Tamaño adaptado para pantallas pequeñas */
+            }
         }
 
         p {

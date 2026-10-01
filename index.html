@@ -59,6 +59,29 @@
             font-weight: 600;
             color: #fff;
             border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Estilos para el icono de estado */
+        .estado-icono {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        .estado-icono.terminada {
+            background-color: #2ec4b6; /* Verde / Turquesa */
+            box-shadow: 0 0 8px rgba(46, 196, 182, 0.5);
+        }
+
+        .estado-icono.pendiente {
+            background-color: #e71d36; /* Rojo */
+            box-shadow: 0 0 8px rgba(231, 29, 54, 0.5);
         }
 
         .fila-cancion .meta {
@@ -120,8 +143,17 @@
                         }
                     } catch (_) { /* si falla, se queda en — */ }
 
+                    // Determina si está terminada según el campo del objeto cancion
+                    // Ajusta 'cancion.terminada' según el nombre exacto de la propiedad en tu backend/API
+                    const estaTerminada = Boolean(cancion.terminada);
+                    const claseEstado = estaTerminada ? 'terminada' : 'pendiente';
+                    const tituloEstado = estaTerminada ? 'Canción terminada' : 'Canción pendiente';
+
                     fila.innerHTML = `
-                        <h2>${cancion.nombreC}</h2>
+                        <h2>
+                            <span>${cancion.nombreC}</span>
+                            <span class="estado-icono ${claseEstado}" title="${tituloEstado}"></span>
+                        </h2>
                         <div class="meta">
                             <span>Arreglos: ${cancion.arreglos || '—'}</span>
                             <span>Tonalidad: ${tonalidad}</span>

@@ -66,7 +66,7 @@
             align-items: start;
         }
         
-        /* Contenedor de la Letra centrado en pantallas anchas */
+        /* Contenedor de la Letra */
         .letra-contenedor {
             position: relative;
             background: #fff;
@@ -74,10 +74,10 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             width: 100%;
-            max-width: 800px; /* Ancho máximo para evitar que se extienda demasiado */
-            margin: 0 auto;   /* Centra horizontalmente el bloque entero */
             overflow: hidden; /* Mantiene la marca de agua dentro de los bordes redondeados */
             z-index: 1;
+            display: flex;
+            justify-content: center; /* Centra el bloque de texto horizontalmente */
         }
 
         /* Marca de agua sólo en el contenedor de la letra */
@@ -93,23 +93,25 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            opacity: 0.18;
+            opacity: 0.18; /* Ajusta la transparencia aquí */
             pointer-events: none;
             z-index: 0;
         }
         
+        /* Bloque de texto de la letra */
         .letra-texto { 
             position: relative;
-            z-index: 1; /* Mantiene el texto alineado a la izquierda por encima del fondo */
-            display: block;
+            z-index: 1; /* Mantiene el texto por encima del fondo */
+            display: inline-block; /* Hace que el ancho sea el de la línea más larga */
+            margin: 0 auto;        /* Centra el bloque de palabras en la tarjeta */
             font-family: 'Sono', monospace;
             font-variation-settings: 'MONO' 1;
             font-size: clamp(10px, 1.3vw, 16px);
             color: #3a3a3a;
-            margin: 0;
             white-space: pre;
             overflow-x: auto;
-            width: 100%;
+            text-align: left;      /* Conserva la alineación del texto a la izquierda */
+            max-width: 100%;
         }
         
         .acorde-link { 
@@ -333,6 +335,12 @@
             <article class="letra-contenedor">
                 <pre id="letra-cancion" class="letra-texto">Abriendo canción...</pre>
             </article>
+    
+            <!-- <aside class="panel-lateral">
+                <div class="wrapper-iframe">
+                    <div id="reproductor-youtube"></div>
+                </div>
+            </aside> -->
         </div>
     </div>
 
@@ -389,14 +397,18 @@
                 document.getElementById('titulo-cancion').textContent = data.nombreC;
                 document.getElementById('nombre-artista').textContent = data.arreglos ? `Arreglos: ${data.arreglos}` : '';
 
+                // 1. Procesamiento e inyección de la letra y acordes interactivos
                 letraCancionDiv.innerHTML = procesarLetraYAcordes(data.contenido);
                 inicializarModalAcordes('caja-acorde');
 
+                // 2. LLAMADA MODULAR AL REPRODUCTOR: Pasa la ID de video y la metadata para la búsqueda
                 const datosContexto = { nombreC: data.nombreC };
                 inyectarReproductor('.wrapper-iframe', data.ytID, datosContexto);
 
+                // 3. Inicializar herramientas de desplazamiento de pantalla automático
                 inicializarAutoscroll('btn-play-scroll', 'slider-velocidad');
 
+                // 4. Menú de transposición: sube/baja tonos y vuelve a pintar la letra en cada cambio
                 inicializarTransponer({
                     contenidoOriginal: data.contenido,
                     onRetransponer: (texto) => {

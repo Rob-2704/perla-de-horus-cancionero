@@ -2,9 +2,9 @@
   "canciones": [
     {
       "idC": "Cuando Yo Quería Ser Grande () []",
-      "titulo": "Cuando Yo Quería Ser Grande",
+      "nombreC": "Cuando Yo Quería Ser Grande () []",
       "arreglos": "",
-      "tonalidad": ""
+      "terminada": true
     }
   ]
 }

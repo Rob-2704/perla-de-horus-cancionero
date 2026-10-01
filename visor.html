@@ -310,11 +310,11 @@
                 <pre id="letra-cancion" class="letra-texto">Abriendo canción...</pre>
             </article>
     
-            <aside class="panel-lateral">
+            <!-- <aside class="panel-lateral">
                 <div class="wrapper-iframe">
                     <div id="reproductor-youtube"></div>
                 </div>
-            </aside>
+            </aside> -->
         </div>
     </div>
 
@@ -376,8 +376,8 @@
                 inicializarModalAcordes('caja-acorde');
 
                 // 2. LLAMADA MODULAR AL REPRODUCTOR: Pasa la ID de video y la metadata para la búsqueda
-                // const datosContexto = { nombreC: data.nombreC };
-                // inyectarReproductor('.wrapper-iframe', data.ytID, datosContexto);
+                const datosContexto = { nombreC: data.nombreC };
+                inyectarReproductor('.wrapper-iframe', data.ytID, datosContexto);
 
                 // 3. Inicializar herramientas de desplazamiento de pantalla automático
                 inicializarAutoscroll('btn-play-scroll', 'slider-velocidad');

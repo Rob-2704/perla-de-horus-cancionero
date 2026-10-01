@@ -3,98 +3,430 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visor de Letra</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="icono.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sono:MONO@0..1&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <title>Visor de Letra y Acordes</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121214;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+        /* Configuración Global y Reset Base */
+        *, *::before, *::after {
             box-sizing: border-box;
         }
-
-        .visor-wrapper {
-            max-width: 800px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        
+        body { 
+            padding-bottom: 120px; 
         }
-
-        /* Contenedor principal de la letra */
+        
+        .container { 
+            max-width: 90%;
+            margin: 0 auto;
+        }
+        
+        /* Encabezados y Botón Volver */
+        .btn-volver { 
+            display: inline-block; 
+            color: #888; 
+            text-decoration: none; 
+            font-size: 13px;
+            margin-bottom: 25px; 
+            transition: color 0.2s;
+        }
+        
+        .btn-volver:hover { 
+            color: var(--accent); 
+        }
+        
+        .info-cabecera {
+            grid-column: 1 / 3;
+            margin-bottom: 10px;
+        }
+        
+        .info-cabecera h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #fff;
+        }
+        
+        .info-cabecera h2 {
+            margin: 0 0 10px 0;
+            padding-bottom: 10px;
+            font-size: 18px;
+            color: #fff;
+            font-weight: 400;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        /* Área Principal (Workspace) */
+        .workspace { 
+            display: grid;
+            gap: 30px;
+            margin: 0 auto;
+            align-items: start;
+        }
+        
+        /* Contenedor de la Letra */
         .letra-contenedor {
             position: relative;
-            background: #ffffff;
+            background: #fff;
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             width: 100%;
-            box-sizing: border-box;
-            overflow: hidden; /* Mantiene la marca de agua dentro de las esquinas redondeadas */
+            overflow: hidden; /* Mantiene la marca de agua dentro de los bordes redondeados */
             z-index: 1;
         }
 
-        /* Marca de agua fija centrada dentro de la tarjeta de la letra */
+        /* Marca de agua sólo en el contenedor de la letra */
         .letra-contenedor::before {
             content: "";
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80%;
-            height: 80%;
+            width: 85%;
+            height: 85%;
             background-image: url('fondo.png');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            opacity: 0.18; /* Regula la transparencia (0.1 a 0.2 es recomendado) */
+            opacity: 0.18; /* Ajusta la transparencia aquí */
             pointer-events: none;
             z-index: 0;
         }
-
-        /* Mantiene el contenido y texto por encima del fondo */
-        .letra-texto {
+        
+        .letra-texto { 
             position: relative;
-            z-index: 1;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            color: #222;
+            z-index: 1; /* Mantiene el texto por encima del fondo */
+            display: block;
+            font-family: 'Sono', monospace;
+            font-variation-settings: 'MONO' 1;
+            font-size: clamp(10px, 1.3vw, 16px);
+            color: #3a3a3a;
+            margin: 0;
+            white-space: pre;
+            overflow-x: auto;
+            width: 100%;
         }
-
-        .btn-volver {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #333;
-            color: #fff;
+        
+        .acorde-link { 
+            color: #0066cc;
+            font-weight: bold;
             text-decoration: none;
-            border-radius: 6px;
-            align-self: flex-start;
-            transition: background 0.3s ease;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.1s;
+        }
+        
+        .acorde-link:hover { 
+            background-color: #e1e4e8; 
+            color: #004499; 
+        }
+        
+        .barra-compas { 
+            color: #3a3a3a; 
+            font-weight: bold; 
+        }
+        
+        /* Panel Lateral e Iframe */
+        .panel-lateral { 
+            position: sticky;
+            top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .wrapper-iframe { 
+            position: relative; 
+            width: 100%; 
+            padding-top: 56.25%; 
+            background: #000; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            border: 1px solid #222;
+        }
+        
+        .wrapper-iframe iframe { 
+            position: absolute; 
+            inset: 0; 
+            width: 100%; 
+            height: 100%; 
+            border: 0; 
+        }
+        
+        /* Modales y Cajas Emergentes */
+        .caja-acorde-emergente { 
+            position: absolute; 
+            display: none; 
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+            padding: 15px; 
+            z-index: 1000; 
+            width: 210px;
+            text-align: center;
+            color: #e0e0e0;
+        }
+        
+        .caja-acorde-emergente h4 { 
+            margin: 0 0 8px 0; 
+            font-size: 18px; 
+            color: #fff;
+            font-family: 'Sono', sans-serif;
+            font-variation-settings: 'MONO' 0;
+        }
+        
+        #wrapper-render {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 10px 0 0 5px;
+        }
+        
+        /* Panel Flotante y Controles */
+        #panel-flotante-wrapper {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            z-index: 999;
+        }
+        
+        .fila-inferior,
+        .panel-scroll-flotante {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .panel-scroll-flotante { 
+            background: rgba(20, 20, 20, 0.95); 
+            border: 1px solid #333; 
+            padding: 12px 25px; 
+            border-radius: 30px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+            backdrop-filter: blur(5px); 
+        }
+        
+        /* Estilos de Botones Comunes */
+        .btn-scroll,
+        .btn-transponer,
+        .btn-toggle-transponer {
+            font-family: 'Sono', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .btn-scroll { 
+            background: var(--accent); 
+            border: none; 
+            color: #000; 
+            width: 36px; 
+            height: 36px; 
+            font-size: 14px; 
+        }
+        
+        .btn-scroll.activo { 
+            background: #ff3333; 
+            color: #fff;
+        }
+        
+        .btn-transponer {
+            background: #fff;
+            color: #111;
+            border: none;
+            width: 36px; 
+            height: 36px; 
+            font-size: 14px; 
+            transition: background 0.15s;
         }
 
-        .btn-volver:hover {
-            background-color: #555;
+        #btn-reset-tono {
+            background: var(--accent);
+        }
+        
+        .btn-transponer:hover {
+            background: #ddd;
+        }
+
+        #label-tonalidad {
+            font-size: 15px;
+            font-weight: bold;
+        }
+        
+        .btn-toggle-transponer {
+            background: rgba(20, 20, 20, 0.95); 
+            border: 1px solid #333; 
+            color: #fff;
+            width: 50px; 
+            height: 50px; 
+            font-size: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px); 
+        }
+        
+        .slider-scroll { 
+            width: 100px; 
+            accent-color: var(--accent); 
+        }
+        
+        .label-scroll { 
+            font-size: 11px; 
+            color: #888; 
+            font-weight: bold;
+            font-family: monospace;
+        }
+        
+        /* Responsive / Media Queries */
+        @media (max-width: 1300px) {
+            body { 
+                padding: 40px 15px 100px 15px;
+            }
+        
+            .workspace { 
+                display: flex;
+                flex-direction: column-reverse; 
+                gap: 20px;
+            }
+        
+            .panel-lateral { 
+                position: relative; 
+                top: 0; 
+                width: 100%;
+            }
+        
+            .letra-contenedor {
+                padding: 20px; 
+            }
+        
+            .letra-texto {
+                line-height: 1.5;
+                letter-spacing: -0.3px;
+            }
         }
     </style>
+    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
+    <div class="container">
+        <a id="link-regreso" href="index.html" class="btn-volver">← Volver al cancionero</a>
+        <div class="info-cabecera">
+            <h1 id="titulo-cancion">Cargando...</h1>
+            <h2 id="nombre-artista"></h2>
+        </div>
 
-    <div class="visor-wrapper">
-        <a href="index.html" class="btn-volver">&larr; Volver</a>
-        
-        <div class="letra-contenedor">
-            <div class="letra-texto" id="letraTexto">
-                <!-- Aquí se cargará la letra dinámicamente o puedes colocar el texto directo -->
-            </div>
+        <div class="workspace">
+            <article class="letra-contenedor">
+                <pre id="letra-cancion" class="letra-texto">Abriendo canción...</pre>
+            </article>
+    
+            <!-- <aside class="panel-lateral">
+                <div class="wrapper-iframe">
+                    <div id="reproductor-youtube"></div>
+                </div>
+            </aside> -->
         </div>
     </div>
 
+    <div id="caja-acorde" class="caja-acorde-emergente">
+       <h4 id="acorde-titulo">C</h4>
+       <span id="origen-acorde-modal" style="font-size:10px; opacity:0.6; display:block; margin-bottom:4px;"></span>
+       <div id="wrapper-render"></div> 
+    </div>
+    
+    <div id="panel-flotante-wrapper">
+        <div id="panel-transponer" class="panel-scroll-flotante" style="display:none;">
+            <label id="label-tonalidad" title="Tonalidad actual" disabled>—</label>
+            <button id="btn-bajar-tono" class="btn-transponer" title="Bajar 1 tono">−1</button>
+            <button id="btn-bajar-medio" class="btn-transponer" title="Bajar medio tono">−½</button>
+            <button id="btn-subir-medio" class="btn-transponer" title="Subir medio tono">+½</button>
+            <button id="btn-subir-tono" class="btn-transponer" title="Subir 1 tono">+1</button>
+            <button id="btn-reset-tono" class="btn-transponer" title="Volver a la tonalidad original">↺</button>
+        </div>
+
+        <div class="fila-inferior">
+            <div id="panel-scroll" class="panel-scroll-flotante">
+                <span class="label-scroll">Autoscroll</span>
+                <button id="btn-play-scroll" class="btn-scroll">▶</button>
+                <input type="range" id="slider-velocidad" class="slider-scroll" min="1" max="10" value="5">
+            </div>
+            <button id="btn-toggle-transponer" class="btn-toggle-transponer" title="Transponer">▲</button>
+        </div>
+    </div>
+
+    <script src="acordes.js"></script>
+
+    <script type="module">
+        import { obtenerContenidoCancion } from './js/api-cliente.js';
+        import { procesarLetraYAcordes, inicializarModalAcordes } from './js/modulo-acordes.js';
+        import { inyectarReproductor } from './js/modulo-reproductor.js';
+        import { inicializarAutoscroll } from './js/modulo-autoscroll.js';
+        import { inicializarTransponer } from './js/modulo-transponer.js';
+
+        const params = new URLSearchParams(window.location.search);
+        const idC = params.get('idC');
+
+        const letraCancionDiv = document.getElementById('letra-cancion');
+
+        async function cargarPlantilla() {
+            if(!idC) {
+                letraCancionDiv.textContent = "Error: No se definió el identificador de la canción.";
+                return;
+            }
+
+            try {
+                const data = await obtenerContenidoCancion(idC);
+                if (data.error) { letraCancionDiv.textContent = "Error: " + data.error; return; }
+
+                document.getElementById('titulo-cancion').textContent = data.nombreC;
+                document.getElementById('nombre-artista').textContent = data.arreglos ? `Arreglos: ${data.arreglos}` : '';
+
+                // 1. Procesamiento e inyección de la letra y acordes interactivos
+                letraCancionDiv.innerHTML = procesarLetraYAcordes(data.contenido);
+                inicializarModalAcordes('caja-acorde');
+
+                // 2. LLAMADA MODULAR AL REPRODUCTOR: Pasa la ID de video y la metadata para la búsqueda
+                const datosContexto = { nombreC: data.nombreC };
+                inyectarReproductor('.wrapper-iframe', data.ytID, datosContexto);
+
+                // 3. Inicializar herramientas de desplazamiento de pantalla automático
+                inicializarAutoscroll('btn-play-scroll', 'slider-velocidad');
+
+                // 4. Menú de transposición: sube/baja tonos y vuelve a pintar la letra en cada cambio
+                inicializarTransponer({
+                    contenidoOriginal: data.contenido,
+                    onRetransponer: (texto) => {
+                        letraCancionDiv.innerHTML = procesarLetraYAcordes(texto);
+                    },
+                    tonalidadLabelId: 'label-tonalidad',
+                    btnSubirTonoId: 'btn-subir-tono',
+                    btnSubirMedioId: 'btn-subir-medio',
+                    btnBajarMedioId: 'btn-bajar-medio',
+                    btnBajarTonoId: 'btn-bajar-tono',
+                    btnResetId: 'btn-reset-tono',
+                    btnToggleId: 'btn-toggle-transponer',
+                    panelId: 'panel-transponer'
+                });
+
+            } catch (err) {
+                console.error(err);
+                letraCancionDiv.textContent = "Error crítico al descargar el contenido de la canción.";
+            }
+        }
+
+        cargarPlantilla();
+    </script>
 </body>
 </html>

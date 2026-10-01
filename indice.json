@@ -1,8 +1,68 @@
 {
   "canciones": [
     {
-      "idC": "Cuando Yo Quería Ser Grande (Ciro Vega González)",
+      "idC": "---Alma, Corazón Y Vida (Ciro Vega González)",
+      "nombreC": "Alma, Corazón Y Vida",
+      "arreglos": "Ciro Vega González",
+      "terminada": false
+    },
+    {
+      "idC": "---Cuando Yo Quería Ser Grande (Ciro Vega González)",
       "nombreC": "Cuando Yo Quería Ser Grande",
+      "arreglos": "Ciro Vega González",
+      "terminada": false
+    },
+    {
+      "idC": "---Ella ()",
+      "nombreC": "Ella",
+      "arreglos": "",
+      "terminada": false
+    },
+    {
+      "idC": "---Esperando La Madrugada (Emmanuel León Apolinar)",
+      "nombreC": "Esperando La Madrugada",
+      "arreglos": "Emmanuel León Apolinar",
+      "terminada": false
+    },
+    {
+      "idC": "Adios Amor (Ciro Vega González)",
+      "nombreC": "Adios Amor",
+      "arreglos": "Ciro Vega González",
+      "terminada": true
+    },
+    {
+      "idC": "Aires Del Mayab (Ciro Vega González)",
+      "nombreC": "Aires Del Mayab",
+      "arreglos": "Ciro Vega González",
+      "terminada": true
+    },
+    {
+      "idC": "Bonita ()",
+      "nombreC": "Bonita",
+      "arreglos": "",
+      "terminada": true
+    },
+    {
+      "idC": "Nochecita (Ciro Vega González)",
+      "nombreC": "Nochecita",
+      "arreglos": "Ciro Vega González",
+      "terminada": true
+    },
+    {
+      "idC": "Perdón (Ciro Vega González)",
+      "nombreC": "Perdón",
+      "arreglos": "Ciro Vega González",
+      "terminada": true
+    },
+    {
+      "idC": "Perfume De Gardénias (Ciro Vega González)",
+      "nombreC": "Perfume De Gardénias",
+      "arreglos": "Ciro Vega González",
+      "terminada": true
+    },
+    {
+      "idC": "Usted (Ciro Vega González)",
+      "nombreC": "Usted",
       "arreglos": "Ciro Vega González",
       "terminada": true
     }

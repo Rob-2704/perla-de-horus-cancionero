@@ -13,7 +13,6 @@ const FORMULAS_TEORICAS = {
 const GRADOS_BASE = { 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 10, 9: 14, 11: 17, 13: 21 };
 
 // Para cada grado "alterable", qué intervalos existentes debe reemplazar una alteración
-// (ej: si agrego un b5, debo quitar cualquier 5ta natural o aumentada que ya estuviera puesta)
 const GRADOS_A_REEMPLAZAR = {
     5:  [6, 7, 8],
     9:  [13, 14, 15],
@@ -22,7 +21,6 @@ const GRADOS_A_REEMPLAZAR = {
 };
 
 // Aplica las alteraciones entre paréntesis (b5, #9, add9, etc.) a una fórmula base de intervalos.
-// Soporta varias alteraciones separadas por coma, ej: "(b5,#9)"
 function aplicarAlteraciones(formulaBase, textoAlteracion) {
     if (!textoAlteracion) return formulaBase;
 
@@ -68,21 +66,11 @@ const traductorAcordes = {
     'DO': 'C', 'RE': 'D', 'MI': 'E', 'FA': 'F', 'SOL': 'G', 'LA': 'A', 'SI': 'B'
 };
 
-// Construye la regex que detecta acordes (misma que usa procesarLetraYAcordes).
-// Se exporta para que modulo-transponer.js identifique EXACTAMENTE los mismos
-// tramos de texto que aquí se resaltan como acordes, y nada más.
 export function crearRegexAcordes() {
-    // Núcleo compartido: raíz + accidental + calidad + número de extensión + sus
     const nucleoAcorde = `([CDEFGAB]|DO|RE|MI|FA|SOL|LA|SI)(#|b)?((?:maj|min|m|dim|aug)?)(5|6|7|8|9|10|11|12|13)?(sus4|sus2|sus)?`;
     const bajoAcorde = `(\\/(([CDEFGAB]|DO|RE|MI|FA|SOL|LA|SI)(#|b)?))?`;
 
-    // Rama A: acorde CON alteración entre paréntesis, ej: Csus(b5), D9(b9), Gm(add9).
-    // El paréntesis ya es una señal inequívoca de que es un acorde, así que sólo se exige
-    // no estar pegado directamente a otra letra (sin el resguardo extra de "palabra en minúscula").
     const conAlteracion = `${nucleoAcorde}(\\((?:add)?[#b]?\\d+(?:\\s*,\\s*(?:add)?[#b]?\\d+)*\\))${bajoAcorde}(?![a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])`;
-
-    // Rama B: acorde SIN alteración entre paréntesis (comportamiento original), con el
-    // resguardo extra que evita confundir una palabra suelta en minúsculas con un acorde.
     const sinAlteracion = `${nucleoAcorde}${bajoAcorde}(?![a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]|\\s(?![xX]\\d)[a-záéíóúüñ])`;
 
     return new RegExp(`(?<![a-záéíóúüñ])(?:${conAlteracion}|${sinAlteracion})`, 'g');
@@ -91,19 +79,13 @@ export function crearRegexAcordes() {
 export function procesarLetraYAcordes(textoOriginal) {
     if (!textoOriginal) return "";
     
-    // Cambiar guiones por líneas de compás continuas
     let textoProcesado = textoOriginal.replace(/-/g, '—');
     
-    // Expresiones regulares para detectar compases y acordes
     const regexBarras = /x\d+|(?<![a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])v(?![a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])|(?<![a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])X(?![a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])|(?<=[\d—])(?:p|h)\d+|(?<=[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])\d+(?![s][u][s])(?=[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])|\([^)]+\)|❙o|o❙|(?!\d—[A-ZÁÉÍÓÚÜÑ\s\r\n])(?!\/[A-ZÁÉÍÓÚÜÑ])(?!\d\/[A-ZÁÉÍÓÚÜÑ])(?:(?!❙o|o❙)[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ.,;:!?¡¿'"#\s])*(?:(?!❙o|o❙)[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ0-9.,;:!?¡¿'"#\s])(?:(?!❙o|o❙)[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ.,;:!?¡¿'"#\s])*/g;
-
     const regexAcordes = crearRegexAcordes();
 
     const envolverBarras = (fragmento) => fragmento.replace(regexBarras, (barra) => `<span class="barra-compas">${barra}</span>`);
 
-    // Recorrer el texto encontrando acordes uno por uno. El regex de barras de compás
-    // sólo se aplica a los tramos de texto que quedan ENTRE acordes, nunca dentro de uno,
-    // para que no rompa las alteraciones entre paréntesis de un acorde, ej: Csus(b5)
     let resultado = "";
     let ultimoIndice = 0;
     let coincidencia;
@@ -119,7 +101,6 @@ export function procesarLetraYAcordes(textoOriginal) {
 
         ultimoIndice = coincidencia.index + acorde.length;
 
-        // Evitar bucles infinitos ante coincidencias vacías
         if (acorde.length === 0) regexAcordes.lastIndex++;
     }
 
@@ -132,7 +113,6 @@ export function inicializarModalAcordes(cajaId) {
     const caja = document.getElementById(cajaId);
     if (!caja) return;
 
-    // Escuchar clics usando delegación de eventos en el body
     document.body.addEventListener('click', function(evento) {
         const link = evento.target.closest('.acorde-link');
         
@@ -154,11 +134,9 @@ function abrirCajaAcorde(nombreAcordeRaw, evento, caja) {
 
     if (!titulo || !wrapperRender) return;
 
-    // Limpiar espacios o caracteres raros
     let textoLimpio = nombreAcordeRaw.trim().replace(/[\s-\-❚❙]/g, '');        
-    titulo.textContent = textoLimpio.replace('_', '/'); // Mostrar con barra visual en el modal
+    titulo.textContent = textoLimpio.replace('_', '/');
 
-    // Desestructurar inversiones
     let partesBajo = textoLimpio.split('_');
     let acordeEstructura = partesBajo[0];
     let notaBajoRaw = partesBajo[1] || null;
@@ -168,7 +146,6 @@ function abrirCajaAcorde(nombreAcordeRaw, evento, caja) {
     let alteraciones = "";
     let acordeEstructuraUpper = acordeEstructura.toUpperCase();
 
-    // Traducir notación latina a americana
     for (const notaLatina of Object.keys(traductorAcordes)) {
         if (acordeEstructuraUpper.startsWith(notaLatina)) {
             raiz = traductorAcordes[notaLatina]; 
@@ -208,8 +185,6 @@ function abrirCajaAcorde(nombreAcordeRaw, evento, caja) {
         sufijoJson = "";
     }
 
-    // Separar el sufijo "base" (calidad + número) del texto entre paréntesis (alteraciones/tensiones)
-    // Ej: "9(b9)" -> sufijoBase "9", textoAlteracion "(b9)" | "m(add9)" -> sufijoBase "m", textoAlteracion "(add9)"
     const coincideParentesis = alteraciones.match(/^([^()]*)(\(.+\))?$/);
     let sufijoBase = coincideParentesis ? coincideParentesis[1] : alteraciones;
     const textoAlteracion = coincideParentesis ? coincideParentesis[2] : null;
@@ -226,7 +201,6 @@ function abrirCajaAcorde(nombreAcordeRaw, evento, caja) {
     const llaveAcordeBusqueda = `${raiz}${sufijoJson}`;
     const llaveConBajoTraducido = notaBajo ? `${llaveAcordeBusqueda}_${notaBajo}` : null;
 
-    // Validación segura de lectura del diccionario global
     const diccionario = window.DICCIONARIO_ACORDES || (typeof DICCIONARIO_ACORDES !== 'undefined' ? DICCIONARIO_ACORDES : null);
     let datosManuales = diccionario ? (
         diccionario[llaveDirectaConBajo]
@@ -234,93 +208,127 @@ function abrirCajaAcorde(nombreAcordeRaw, evento, caja) {
         || (!notaBajo && diccionario[llaveAcordeBusqueda])
     ) : null;
 
-    // Posicionar modal flotante cerca del cursor
+    // --- RENDERIZADO DEL DIAGRAMA Y CÁLCULO DE POSICIÓN REPOSITIVA ---
     caja.style.display = "block";
-    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-    caja.style.left = (evento.clientX + scrollX + 15) + "px";
-    caja.style.top = (evento.clientY + scrollY + 15) + "px";
+    caja.style.position = "fixed"; // Garantiza posicionamiento respecto a la ventana del navegador
 
     if (datosManuales) {
         if (badgeorigen) badgeorigen.textContent = "Diccionario (Manual)";
         dibujarAcordeCanvasExpandido(wrapperRender, datosManuales);
-        return;
-    }
+    } else {
+        // FALLBACK AUTOMÁTICO
+        try {
+            if (badgeorigen) badgeorigen.textContent = "Armonía Inteligente (Auto)";
 
-    // FALLBACK AUTOMÁTICO (Si no existe en acordes.js)
-    try {
-        if (badgeorigen) badgeorigen.textContent = "Armonía Inteligente (Auto)";
+            let notaRaizNormalizada = EQUIVALENCIAS_BEMOLES[raiz] || raiz;
+            let semitonoRaiz = NOMBRES_NOTAS.indexOf(notaRaizNormalizada);
+            if (semitonoRaiz === -1) semitonoRaiz = 0;
 
-        let notaRaizNormalizada = EQUIVALENCIAS_BEMOLES[raiz] || raiz;
-        let semitonoRaiz = NOMBRES_NOTAS.indexOf(notaRaizNormalizada);
-        if (semitonoRaiz === -1) semitonoRaiz = 0;
+            let formulaBase = FORMULAS_TEORICAS[sufijoBase] || FORMULAS_TEORICAS[""];
+            let formula = aplicarAlteraciones(formulaBase, textoAlteracion);
+            let notasAcorde = formula.map(intervalo => (semitonoRaiz + intervalo) % 12);
 
-        let formulaBase = FORMULAS_TEORICAS[sufijoBase] || FORMULAS_TEORICAS[""];
-        let formula = aplicarAlteraciones(formulaBase, textoAlteracion);
-        let notasAcorde = formula.map(intervalo => (semitonoRaiz + intervalo) % 12);
+            let semitonoBajo = null;
+            if (notaBajo) {
+                let bajoNormalizado = EQUIVALENCIAS_BEMOLES[notaBajo] || notaBajo;
+                semitonoBajo = NOMBRES_NOTAS.indexOf(bajoNormalizado);
+            }
 
-        let semitonoBajo = null;
-        if (notaBajo) {
-            let bajoNormalizado = EQUIVALENCIAS_BEMOLES[notaBajo] || notaBajo;
-            semitonoBajo = NOMBRES_NOTAS.indexOf(bajoNormalizado);
-        }
+            let trastesCalculados = [];
+            let trasteMinimo = 24, trasteMaximo = 0;
 
-        let trastesCalculados = [];
-        let trasteMinimo = 24, trasteMaximo = 0;
+            for (let i = 0; i < 6; i++) {
+                let notaCuerdaAlAire = AFINACION_GUITARRA[i];
+                let trasteOptimo = "X";
 
-        for (let i = 0; i < 6; i++) {
-            let notaCuerdaAlAire = AFINACION_GUITARRA[i];
-            let trasteOptimo = "X";
-
-            for (let traste = 0; traste <= 12; traste++) {
-                let notaEnTraste = (notaCuerdaAlAire + traste) % 12;
-                
-                if (i === 0 && semitonoBajo !== null) {
-                    if (notaEnTraste === semitonoBajo) {
-                        trasteOptimo = traste;
-                        break;
-                    }
-                } else {
-                    if (notasAcorde.includes(notaEnTraste)) {
-                        trasteOptimo = traste;
-                        break;
+                for (let traste = 0; traste <= 12; traste++) {
+                    let notaEnTraste = (notaCuerdaAlAire + traste) % 12;
+                    
+                    if (i === 0 && semitonoBajo !== null) {
+                        if (notaEnTraste === semitonoBajo) {
+                            trasteOptimo = traste;
+                            break;
+                        }
+                    } else {
+                        if (notasAcorde.includes(notaEnTraste)) {
+                            trasteOptimo = traste;
+                            break;
+                        }
                     }
                 }
+
+                if (trasteOptimo !== "X" && trasteOptimo > 0) {
+                    if (trasteOptimo < trasteMinimo) trasteMinimo = trasteOptimo;
+                    if (trasteOptimo > trasteMaximo) trasteMaximo = trasteOptimo;
+                }
+                trastesCalculados.push(trasteOptimo);
             }
 
-            if (trasteOptimo !== "X" && trasteOptimo > 0) {
-                if (trasteOptimo < trasteMinimo) trasteMinimo = trasteOptimo;
-                if (trasteOptimo > trasteMaximo) trasteMaximo = trasteOptimo;
+            let requiereCejilla = false;
+            let trasteInicioDibujo = 1;
+            if (trasteMaximo - trasteMinimo <= 3 && trasteMinimo !== 24 && trasteMinimo > 2) {
+                trasteInicioDibujo = trasteMinimo;
+                requiereCejilla = true;
             }
-            trastesCalculados.push(trasteOptimo);
+
+            const objetoAcordeDinamico = {
+                strings: trastesCalculados.join(" "),
+                cejilla: requiereCejilla,
+                trasteInicio: trasteInicioDibujo,
+                cuerdasCejilla: requiereCejilla ? [1, 6] : null
+            };
+
+            dibujarAcordeCanvasExpandido(wrapperRender, objetoAcordeDinamico);
+
+        } catch (error) {
+            wrapperRender.innerHTML = `<div style="font-size:11px; color:#ff3333;">Error de auto-cálculo</div>`;
         }
-
-        let requiereCejilla = false;
-        let trasteInicioDibujo = 1;
-        if (trasteMaximo - trasteMinimo <= 3 && trasteMinimo !== 24 && trasteMinimo > 2) {
-            trasteInicioDibujo = trasteMinimo;
-            requiereCejilla = true;
-        }
-
-        const objetoAcordeDinamico = {
-            strings: trastesCalculados.join(" "),
-            cejilla: requiereCejilla,
-            trasteInicio: trasteInicioDibujo,
-            cuerdasCejilla: requiereCejilla ? [1, 6] : null
-        };
-
-        dibujarAcordeCanvasExpandido(wrapperRender, objetoAcordeDinamico);
-
-    } catch (error) {
-        wrapperRender.innerHTML = `<div style="font-size:11px; color:#ff3333;">Error de auto-cálculo</div>`;
     }
+
+    // --- REPOSICIONAMIENTO DINÁMICO EN PANTALLA ---
+    const rect = caja.getBoundingClientRect();
+    const padding = 12;
+
+    let left = evento.clientX + 10;
+    let top = evento.clientY - rect.height - 10;
+
+    // Si sobresale por arriba, ubicar abajo del toque/clic
+    if (top < padding) {
+        top = evento.clientY + 20;
+    }
+
+    // Si sobresale por abajo de la ventana
+    if (top + rect.height > window.innerHeight - padding) {
+        top = window.innerHeight - rect.height - padding;
+    }
+
+    // Si sobresale por la derecha
+    if (left + rect.width > window.innerWidth - padding) {
+        left = window.innerWidth - rect.width - padding;
+    }
+
+    // Si sobresale por la izquierda
+    if (left < padding) {
+        left = padding;
+    }
+
+    caja.style.left = `${left}px`;
+    caja.style.top = `${top}px`;
 }
 
 function dibujarAcordeCanvasExpandido(wrapper, datos) {
     wrapper.innerHTML = ""; 
 
     const canvas = document.createElement('canvas');
-    canvas.width = 150; canvas.height = 160;
+    canvas.width = 150; 
+    canvas.height = 160;
+    
+    // Hace que el canvas sea escalable mediante CSS y se reduzca en celulares
+    canvas.style.maxWidth = "100%";
+    canvas.style.height = "auto";
+    canvas.style.display = "block";
+    canvas.style.margin = "0 auto";
+
     wrapper.appendChild(canvas);
 
     const ctx = canvas.getContext('2d');

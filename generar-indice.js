@@ -1,72 +1,40 @@
+// Uso: node generar-indice.js
+// Recorre Canciones/<Título (Arreglos)>.txt y crea indice.json en la raíz.
+//
+// Formato del nombre de archivo:
+//   Título (Arreglos).txt
+//   ---Título (Arreglos).txt      ← el prefijo --- indica que NO está terminada
+
 const fs = require('fs');
 const path = require('path');
 
-const CARPETA_CANCIONES = './Canciones';
-const ARCHIVO_INDICE = './indice.json';
+const RAIZ = path.join(__dirname, 'Canciones');
+const orden = (a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' });
 
-function obtenerArchivos(dir) {
-    let resultados = [];
-    if (!fs.existsSync(dir)) return resultados;
-    
-    const lista = fs.readdirSync(dir);
-    lista.forEach(archivo => {
-        const rutaAbsoluta = path.join(dir, archivo);
-        const stat = fs.statSync(rutaAbsoluta);
-        if (stat && stat.isDirectory()) {
-            resultados = resultados.concat(obtenerArchivos(rutaAbsoluta));
-        } else if (archivo.endsWith('.txt')) {
-            resultados.push(rutaAbsoluta);
-        }
-    });
-    return resultados;
-}
-
-function parsearNombreArchivo(nombreRelativo) {
-    const sinExtension = nombreRelativo.replace(/\.txt$/i, '');
-    const nombreBase = path.basename(sinExtension);
-
-    let titulo = nombreBase;
-    let arreglos = '';
-    let tonalidad = '';
-
-    // 1. Extraer Tonalidad [...]
-    const matchTonalidad = titulo.match(/\[(.*?)\]/);
-    if (matchTonalidad) {
-        tonalidad = matchTonalidad[1].trim();
-        titulo = titulo.replace(/\[.*?\]/, '').trim();
+function parsearNombre(base) {
+    const m = base.match(/^(.*?)\s*(?:\(([^()]*)\))?\s*$/);
+    let nombreC = base, arreglos = '';
+    if (m) {
+        nombreC = m[1].trim() || base;
+        arreglos = (m[2] || '').trim();
     }
-
-    // 2. Extraer Arreglos (...)
-    const matchArreglos = titulo.match(/\((.*?)\)/);
-    if (matchArreglos) {
-        arreglos = matchArreglos[1].trim();
-        titulo = titulo.replace(/\(.*?\)/, '').trim();
-    }
-
-    const idC = sinExtension.replace(/\\/g, '/');
-
-    return {
-        idC,
-        titulo: titulo.trim(),
-        arreglos,
-        tonalidad
-    };
+    return { nombreC, arreglos };
 }
 
-function generarIndice() {
-    console.log("📑 Generando indice.json...");
-    const archivos = obtenerArchivos(CARPETA_CANCIONES);
-    
-    const canciones = archivos.map(ruta => {
-        const rutaRelativa = path.relative(CARPETA_CANCIONES, ruta);
-        return parsearNombreArchivo(rutaRelativa);
-    });
-
-    // Ordenar alfabéticamente por el título de la canción
-    canciones.sort((a, b) => a.titulo.localeCompare(b.titulo, 'es', { sensitivity: 'base' }));
-
-    fs.writeFileSync(ARCHIVO_INDICE, JSON.stringify({ canciones }, null, 2), 'utf-8');
-    console.log(`✅ Índice generado con ${canciones.length} canciones.`);
+function leerCanciones() {
+    return fs.readdirSync(RAIZ, { withFileTypes: true })
+        .filter(d => d.isFile() && d.name.toLowerCase().endsWith('.txt'))
+        .map(d => d.name)
+        .sort(orden)
+        .map(f => {
+            const base = f.replace(/\.txt$/i, '');
+            const limpio = base.replace(/^-{3}\s*/, '');   // quita el prefijo ---
+            const terminada = limpio === base;
+            const { nombreC, arreglos } = parsearNombre(limpio);
+            return { idC: base, nombreC, arreglos, terminada };
+        });
 }
 
-generarIndice();
+const canciones = leerCanciones();
+fs.writeFileSync(path.join(__dirname, 'indice.json'), JSON.stringify({ canciones }, null, 2));
+console.log(`indice.json listo: ${canciones.length} canciones`);

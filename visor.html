@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="vinilo.png">
+    <link rel="icon" type="image/x-icon" href="icono.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sono:MONO@0..1&display=swap" rel="stylesheet">
@@ -299,7 +299,7 @@
 </head>
 <body>
     <div class="container">
-        <a id="link-regreso" href="index.html" class="btn-volver">← Ir al Visor de Música</a>
+        <a id="link-regreso" href="index.html" class="btn-volver">← Volver al cancionero</a>
         <div class="info-cabecera">
             <h1 id="titulo-cancion">Cargando...</h1>
             <h2 id="nombre-artista"></h2>
@@ -355,15 +355,8 @@
 
         const params = new URLSearchParams(window.location.search);
         const idC = params.get('idC');
-        const idA = params.get('idA');
-        const nombreA = params.get('nombreA') || 'Artista';
 
-        const linkRegreso = document.getElementById('link-regreso');
         const letraCancionDiv = document.getElementById('letra-cancion');
-
-        if(idA) {
-            linkRegreso.href = `canciones.html?idA=${idA}&nombre=${encodeURIComponent(nombreA)}`;
-        }
 
         async function cargarPlantilla() {
             if(!idC) {
@@ -376,14 +369,14 @@
                 if (data.error) { letraCancionDiv.textContent = "Error: " + data.error; return; }
 
                 document.getElementById('titulo-cancion').textContent = data.nombreC;
-                document.getElementById('nombre-artista').textContent = nombreA;
+                document.getElementById('nombre-artista').textContent = data.arreglos ? `Arreglos: ${data.arreglos}` : '';
 
                 // 1. Procesamiento e inyección de la letra y acordes interactivos
                 letraCancionDiv.innerHTML = procesarLetraYAcordes(data.contenido);
                 inicializarModalAcordes('caja-acorde');
 
                 // 2. LLAMADA MODULAR AL REPRODUCTOR: Pasa la ID de video y la metadata para la búsqueda
-                const datosContexto = { nombreA, nombreC: data.nombreC, albumC: data.albumC };
+                const datosContexto = { nombreC: data.nombreC };
                 inyectarReproductor('.wrapper-iframe', data.ytID, datosContexto);
 
                 // 3. Inicializar herramientas de desplazamiento de pantalla automático

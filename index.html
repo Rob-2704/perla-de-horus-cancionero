@@ -8,19 +8,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sono:MONO@0..1&display=swap" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <title>Acordes & Letras - Artistas</title>
+    <title>Cancionero</title>
     <style>
         header {
-            max-width: 1200px;
+            max-width: 700px;
             margin: 0 auto 30px auto;
         }
-        
+
         h1 {
             margin: 0;
             font-size: 24px;
             color: #fff;
         }
-        
+
         p {
             margin: 5px 0 0 0;
             font-size: 13px;
@@ -30,49 +30,43 @@
             margin-bottom: 10px;
         }
 
-        .explorador-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+        .lista-canciones {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
-        .tarjeta {
+        .fila-cancion {
             background-color: #1e1e24;
-            border-radius: 12px;
-            aspect-ratio: 1 / 1;
-            position: relative;
+            border-radius: 10px;
+            padding: 16px 20px;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            overflow: hidden;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            transition: transform 0.15s, box-shadow 0.15s;
         }
 
-        .tarjeta:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        .fila-cancion:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        .icono-flotante {
-            position: absolute;
-            bottom: 12px;
-            left: 12px;
-            font-size: 16px;
-            z-index: 2;
-            background: rgba(0, 0, 0, 0.6);
+        .fila-cancion h2 {
+            margin: 0 0 8px 0;
+            padding-bottom: 8px;
+            font-size: 18px;
+            font-weight: 600;
             color: #fff;
-            padding: 4px 10px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            font-weight: bold;
-            margin-right: 12px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .fila-cancion .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 13px;
+            color: #999;
         }
 
         .cargando {
@@ -81,57 +75,62 @@
             padding: 40px;
             font-family: 'Sono', monospace;
         }
-
-        @media (min-width: 600px) {
-            .explorador-grid {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-                max-width: 1200px;
-                gap: 20px;
-            }
-        }
-
-        @media only screen and (max-width: 767px) {
-            .icono-flotante {
-                font-size: 12px;
-            }
-        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Artistas</h1>
-        <p>Selecciona un artista para ver sus canciones.</p>
+        <h1>Cancionero</h1>
+        <p>Selecciona una canción.</p>
     </header>
 
-    <main id="explorador" class="explorador-grid">
-        <div class="cargando">Buscando portadas en iTunes...</div>
+    <main id="lista-canciones" class="lista-canciones">
+        <div class="cargando">Cargando canciones...</div>
     </main>
 
     <script type="module">
-        import { obtenerArtistas, obtenerPortadaArtista } from './js/api-cliente.js';
+        import { obtenerCanciones, obtenerContenidoCancion } from './js/api-cliente.js';
+        import { detectarTonalidad, nombreTonalidad } from './js/modulo-transponer.js';
 
-        const exploradorDiv = document.getElementById('explorador');
+        const listaDiv = document.getElementById('lista-canciones');
 
         async function init() {
             try {
-                const artistas = await obtenerArtistas();
-                exploradorDiv.innerHTML = "";
-                
-                for (const artista of artistas) {
-                    const tarjeta = document.createElement('div');
-                    tarjeta.className = "tarjeta";
-                    
-                    tarjeta.onclick = () => {
-                        window.location.href = `canciones.html?idA=${artista.idA}&nombre=${encodeURIComponent(artista.nombreA)}`;
+                const canciones = await obtenerCanciones();
+                listaDiv.innerHTML = "";
+
+                if (canciones.length === 0) {
+                    listaDiv.innerHTML = "<div>Todavía no hay canciones registradas.</div>";
+                    return;
+                }
+
+                for (const cancion of canciones) {
+                    const fila = document.createElement('div');
+                    fila.className = "fila-cancion";
+
+                    fila.onclick = () => {
+                        window.location.href = `visor.html?idC=${encodeURIComponent(cancion.idC)}`;
                     };
-                    
-                    const portadaUrl = await obtenerPortadaArtista(artista.nombreA);
-                    tarjeta.style.backgroundImage = `url('${portadaUrl}')`;
-                    tarjeta.innerHTML = `<div class="icono-flotante">${artista.nombreA}</div>`;
-                    exploradorDiv.appendChild(tarjeta);
+
+                    // La tonalidad se detecta a partir de los acordes del propio archivo
+                    let tonalidad = '—';
+                    try {
+                        const datos = await obtenerContenidoCancion(cancion.idC);
+                        if (datos.contenido) {
+                            tonalidad = nombreTonalidad(detectarTonalidad(datos.contenido));
+                        }
+                    } catch (_) { /* si falla, se queda en — */ }
+
+                    fila.innerHTML = `
+                        <h2>${cancion.nombreC}</h2>
+                        <div class="meta">
+                            <span>Arreglos: ${cancion.arreglos || '—'}</span>
+                            <span>Tonalidad: ${tonalidad}</span>
+                        </div>
+                    `;
+                    listaDiv.appendChild(fila);
                 }
             } catch (err) {
-                exploradorDiv.innerHTML = "<div class='cargando'>Error al conectar con la base de datos.</div>";
+                listaDiv.innerHTML = "<div class='cargando'>Error al cargar el cancionero.</div>";
             }
         }
 

@@ -1,4 +1,6 @@
-// api-cliente.js — Versión simplificada para lista directa de canciones (sin imágenes/APIs)
+// api-cliente.js — versión estática para GitHub Pages (sin PHP)
+// Datos: indice.json (generado por generar-indice.js) + archivos .txt de /Canciones
+// Ya no hay artistas ni portadas: cada canción es un archivo suelto en Canciones/.
 const CARPETA = 'Canciones';
 
 let indicePromise = null;
@@ -15,28 +17,22 @@ function cargarIndice() {
 
 export async function obtenerCanciones() {
     const indice = await cargarIndice();
-    return (indice.canciones || []).map(c => ({
-        ...c,
-        idC: encodeURIComponent(c.idC)
-    }));
+    return indice.canciones;
 }
 
 export async function obtenerContenidoCancion(idC) {
-    const idDecodificado = decodeURIComponent(idC);
-    const ruta = [CARPETA, ...idDecodificado.split('/')].map(encodeURIComponent).join('/') + '.txt';
-    
+    const indice = await cargarIndice();
+    const info = indice.canciones.find(c => c.idC === idC);
+
+    const ruta = `${CARPETA}/${encodeURIComponent(idC)}.txt`;
     const r = await fetch(ruta);
     if (!r.ok) return { error: `No se encontró el archivo (${r.status})` };
 
-    const indice = await cargarIndice();
-    const info = (indice.canciones || []).find(c => c.idC === idC || c.idC === idDecodificado);
-
     return {
         idC,
-        nombreC: info ? info.titulo : idDecodificado.split('/').pop(),
+        nombreC: info ? info.nombreC : idC,
         contenido: await r.text(),
-        ytID: '', 
-        arreglos: info ? info.arreglos : '',
-        tonalidad: info ? info.tonalidad : ''
+        ytID: '',                       // pendiente: se definirá más adelante
+        arreglos: info ? info.arreglos : ''
     };
 }

@@ -23,16 +23,18 @@ export async function obtenerCanciones() {
 export async function obtenerContenidoCancion(idC) {
     const indice = await cargarIndice();
     const info = indice.canciones.find(c => c.idC === idC);
+    if (!info) return { error: 'Canción no encontrada' };
 
-    const ruta = `${CARPETA}/${encodeURIComponent(idC)}.txt`;
+    // El idC es solo un número para la URL; el archivo real en disco es "info.archivo"
+    const ruta = `${CARPETA}/${encodeURIComponent(info.archivo)}.txt`;
     const r = await fetch(ruta);
     if (!r.ok) return { error: `No se encontró el archivo (${r.status})` };
 
     return {
         idC,
-        nombreC: info ? info.nombreC : idC,
+        nombreC: info.nombreC,
         contenido: await r.text(),
         ytID: '',                       // pendiente: se definirá más adelante
-        arreglos: info ? info.arreglos : ''
+        arreglos: info.arreglos
     };
 }

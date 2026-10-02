@@ -105,6 +105,11 @@
             box-shadow: 0 0 8px rgba(46, 196, 182, 0.5);
         }
 
+        .estado-icono.revisar {
+            background-color: #f5c518; /* Amarillo */
+            box-shadow: 0 0 8px rgba(245, 197, 24, 0.5);
+        }
+
         .estado-icono.pendiente {
             background-color: #e71d36; /* Rojo */
             box-shadow: 0 0 8px rgba(231, 29, 54, 0.5);
@@ -158,7 +163,7 @@
                     fila.className = "fila-cancion";
 
                     fila.onclick = () => {
-                        window.location.href = `visor.html?idC=${encodeURIComponent(cancion.idC)}`;
+                        window.location.href = `visor?idC=${encodeURIComponent(cancion.idC)}`;
                     };
 
                     // La tonalidad se detecta a partir de los acordes del propio archivo
@@ -170,10 +175,13 @@
                         }
                     } catch (_) { /* si falla, se queda en — */ }
 
-                    // Determina si está terminada según la propiedad de la canción
-                    const estaTerminada = Boolean(cancion.terminada);
-                    const claseEstado = estaTerminada ? 'terminada' : 'pendiente';
-                    const tituloEstado = estaTerminada ? 'Canción terminada' : 'Canción pendiente';
+                    // Estado de la canción: terminada (verde), revisar (amarillo) o pendiente (rojo)
+                    const claseEstado = cancion.estado || 'terminada';
+                    const tituloEstado = {
+                        terminada: 'Canción terminada',
+                        revisar: 'Hay que revisarla',
+                        pendiente: 'Canción no terminada'
+                    }[claseEstado] || '';
 
                     fila.innerHTML = `
                         <h2>

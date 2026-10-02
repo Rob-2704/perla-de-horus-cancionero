@@ -183,7 +183,7 @@ export function inicializarTransponer(opciones) {
         btnToggle.addEventListener('click', () => {
             const estaAbierto = panel.style.display !== 'none';
             panel.style.display = estaAbierto ? 'none' : 'flex';
-            btnToggle.textContent = estaAbierto ? '▲' : '▼';
+            btnToggle.classList.toggle('abierto', !estaAbierto);
         });
     }
 

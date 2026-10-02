@@ -10,6 +10,32 @@
     <link href="style.css" rel="stylesheet">
     <title>Cancionero</title>
     <style>
+        body {
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            height: 70%;
+            background-image: url('fondo.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header, main {
+            position: relative;
+            z-index: 1;
+        }
+
         header {
             max-width: 1000px;
             margin: 0 auto 30px auto;

@@ -1,5 +1,5 @@
 // api-cliente.js — versión estática para GitHub Pages (sin PHP)
-// Datos: indice.json (generado por generar-indice.js) + archivos .txt de /Canciones
+// Datos: json/indice.json (generado por generar-indice.js) + archivos .txt de /Canciones
 // Ya no hay artistas ni portadas: cada canción es un archivo suelto en Canciones/.
 const CARPETA = 'Canciones';
 
@@ -7,8 +7,8 @@ let indicePromise = null;
 
 function cargarIndice() {
     if (!indicePromise) {
-        indicePromise = fetch('indice.json', { cache: 'no-cache' }).then(r => {
-            if (!r.ok) throw new Error('No se pudo cargar indice.json');
+        indicePromise = fetch('json/indice.json', { cache: 'no-cache' }).then(r => {
+            if (!r.ok) throw new Error('No se pudo cargar json/indice.json');
             return r.json();
         });
     }

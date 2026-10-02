@@ -1,130 +1,151 @@
 {
   "canciones": [
     {
-      "idC": "---Alma, Corazón Y Vida (Ciro Vega González)",
-      "nombreC": "Alma, Corazón Y Vida",
-      "arreglos": "Ciro Vega González",
-      "terminada": false
-    },
-    {
-      "idC": "---Amor Mío",
+      "idC": "1",
       "nombreC": "Amor Mío",
       "arreglos": "",
-      "terminada": false
+      "estado": "pendiente",
+      "archivo": "--Amor Mío"
     },
     {
-      "idC": "---Chapala (Ciro Vega González, Emmanuel León Apolinar)",
+      "idC": "2",
       "nombreC": "Chapala",
       "arreglos": "Ciro Vega González, Emmanuel León Apolinar",
-      "terminada": false
+      "estado": "pendiente",
+      "archivo": "--Chapala (Ciro Vega González, Emmanuel León Apolinar)"
     },
     {
-      "idC": "---Cuando Yo Quería Ser Grande (Ciro Vega González)",
+      "idC": "3",
       "nombreC": "Cuando Yo Quería Ser Grande",
       "arreglos": "Ciro Vega González",
-      "terminada": false
+      "estado": "pendiente",
+      "archivo": "--Cuando Yo Quería Ser Grande (Ciro Vega González)"
     },
     {
-      "idC": "---Ella ()",
-      "nombreC": "Ella",
-      "arreglos": "",
-      "terminada": false
-    },
-    {
-      "idC": "---Esperando La Madrugada (Emmanuel León Apolinar)",
-      "nombreC": "Esperando La Madrugada",
-      "arreglos": "Emmanuel León Apolinar",
-      "terminada": false
-    },
-    {
-      "idC": "---Granada (Osvaldo Daniel Barrera, Emmanuel León Apolinar)",
-      "nombreC": "Granada",
-      "arreglos": "Osvaldo Daniel Barrera, Emmanuel León Apolinar",
-      "terminada": false
-    },
-    {
-      "idC": "---Las Golondrinas (Ciro Vega González)",
-      "nombreC": "Las Golondrinas",
-      "arreglos": "Ciro Vega González",
-      "terminada": false
-    },
-    {
-      "idC": "---Las Mañanitas (Ciro Vega González)",
-      "nombreC": "Las Mañanitas",
-      "arreglos": "Ciro Vega González",
-      "terminada": false
-    },
-    {
-      "idC": "---Los Mirlos (Ciro Vega González)",
-      "nombreC": "Los Mirlos",
-      "arreglos": "Ciro Vega González",
-      "terminada": false
-    },
-    {
-      "idC": "---Serenata Huasteca",
+      "idC": "4",
       "nombreC": "Serenata Huasteca",
       "arreglos": "",
-      "terminada": false
+      "estado": "pendiente",
+      "archivo": "--Serenata Huasteca"
     },
     {
-      "idC": "Adios Amor (Ciro Vega González)",
+      "idC": "5",
+      "nombreC": "Alma, Corazón Y Vida",
+      "arreglos": "Ciro Vega González",
+      "estado": "revisar",
+      "archivo": "-Alma, Corazón Y Vida (Ciro Vega González)"
+    },
+    {
+      "idC": "6",
+      "nombreC": "Ella",
+      "arreglos": "",
+      "estado": "revisar",
+      "archivo": "-Ella ()"
+    },
+    {
+      "idC": "7",
+      "nombreC": "Esperando La Madrugada",
+      "arreglos": "Emmanuel León Apolinar",
+      "estado": "revisar",
+      "archivo": "-Esperando La Madrugada (Emmanuel León Apolinar)"
+    },
+    {
+      "idC": "8",
+      "nombreC": "Granada",
+      "arreglos": "Osvaldo Daniel Barrera, Emmanuel León Apolinar",
+      "estado": "revisar",
+      "archivo": "-Granada (Osvaldo Daniel Barrera, Emmanuel León Apolinar)"
+    },
+    {
+      "idC": "9",
+      "nombreC": "Las Golondrinas",
+      "arreglos": "Ciro Vega González",
+      "estado": "revisar",
+      "archivo": "-Las Golondrinas (Ciro Vega González)"
+    },
+    {
+      "idC": "10",
+      "nombreC": "Las Mañanitas",
+      "arreglos": "Ciro Vega González",
+      "estado": "revisar",
+      "archivo": "-Las Mañanitas (Ciro Vega González)"
+    },
+    {
+      "idC": "11",
+      "nombreC": "Los Mirlos",
+      "arreglos": "Ciro Vega González",
+      "estado": "revisar",
+      "archivo": "-Los Mirlos (Ciro Vega González)"
+    },
+    {
+      "idC": "12",
       "nombreC": "Adios Amor",
       "arreglos": "Ciro Vega González",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "Adios Amor (Ciro Vega González)"
     },
     {
-      "idC": "Aires Del Mayab (Ciro Vega González)",
+      "idC": "13",
       "nombreC": "Aires Del Mayab",
       "arreglos": "Ciro Vega González",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "Aires Del Mayab (Ciro Vega González)"
     },
     {
-      "idC": "Bonita ()",
+      "idC": "14",
       "nombreC": "Bonita",
       "arreglos": "",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "Bonita ()"
     },
     {
-      "idC": "Imprescindible (Emmanuel León Apolinar)",
+      "idC": "15",
       "nombreC": "Imprescindible",
       "arreglos": "Emmanuel León Apolinar",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "Imprescindible (Emmanuel León Apolinar)"
     },
     {
-      "idC": "La Malagueña (Ciro Vega González)",
+      "idC": "16",
       "nombreC": "La Malagueña",
       "arreglos": "Ciro Vega González",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "La Malagueña (Ciro Vega González)"
     },
     {
-      "idC": "Nochecita (Ciro Vega González)",
+      "idC": "17",
       "nombreC": "Nochecita",
       "arreglos": "Ciro Vega González",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "Nochecita (Ciro Vega González)"
     },
     {
-      "idC": "Perdón (Ciro Vega González)",
+      "idC": "18",
       "nombreC": "Perdón",
       "arreglos": "Ciro Vega González",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "Perdón (Ciro Vega González)"
     },
     {
-      "idC": "Perfume De Gardénias (Ciro Vega González)",
+      "idC": "19",
       "nombreC": "Perfume De Gardénias",
       "arreglos": "Ciro Vega González",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "Perfume De Gardénias (Ciro Vega González)"
     },
     {
-      "idC": "Usted (Ciro Vega González)",
+      "idC": "20",
       "nombreC": "Usted",
       "arreglos": "Ciro Vega González",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "Usted (Ciro Vega González)"
     },
     {
-      "idC": "Ven (Ciro Vega González)",
+      "idC": "21",
       "nombreC": "Ven",
       "arreglos": "Ciro Vega González",
-      "terminada": true
+      "estado": "terminada",
+      "archivo": "Ven (Ciro Vega González)"
     }
   ]
 }

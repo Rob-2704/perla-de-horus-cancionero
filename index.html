@@ -150,7 +150,10 @@
 
         async function init() {
             try {
-                const canciones = await obtenerCanciones();
+                const ORDEN_ESTADO = { terminada: 0, revisar: 1, pendiente: 2 };
+                const canciones = (await obtenerCanciones())
+                    .slice()
+                    .sort((a, b) => (ORDEN_ESTADO[a.estado] ?? 0) - (ORDEN_ESTADO[b.estado] ?? 0));
                 listaDiv.innerHTML = "";
 
                 if (canciones.length === 0) {

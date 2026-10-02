@@ -43,6 +43,24 @@
       "terminada": false
     },
     {
+      "idC": "---Las Golondrinas (Ciro Vega González)",
+      "nombreC": "Las Golondrinas",
+      "arreglos": "Ciro Vega González",
+      "terminada": false
+    },
+    {
+      "idC": "---Las Mañanitas (Ciro Vega González)",
+      "nombreC": "Las Mañanitas",
+      "arreglos": "Ciro Vega González",
+      "terminada": false
+    },
+    {
+      "idC": "---Los Mirlos (Ciro Vega González)",
+      "nombreC": "Los Mirlos",
+      "arreglos": "Ciro Vega González",
+      "terminada": false
+    },
+    {
       "idC": "---Serenata Huasteca",
       "nombreC": "Serenata Huasteca",
       "arreglos": "",
@@ -64,6 +82,12 @@
       "idC": "Bonita ()",
       "nombreC": "Bonita",
       "arreglos": "",
+      "terminada": true
+    },
+    {
+      "idC": "Imprescindible (Emmanuel León Apolinar)",
+      "nombreC": "Imprescindible",
+      "arreglos": "Emmanuel León Apolinar",
       "terminada": true
     },
     {
@@ -93,6 +117,12 @@
     {
       "idC": "Usted (Ciro Vega González)",
       "nombreC": "Usted",
+      "arreglos": "Ciro Vega González",
+      "terminada": true
+    },
+    {
+      "idC": "Ven (Ciro Vega González)",
+      "nombreC": "Ven",
       "arreglos": "Ciro Vega González",
       "terminada": true
     }

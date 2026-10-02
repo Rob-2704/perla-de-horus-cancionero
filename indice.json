@@ -13,6 +13,12 @@
       "terminada": false
     },
     {
+      "idC": "---Chapala (Ciro Vega González, Emmanuel León Apolinar)",
+      "nombreC": "Chapala",
+      "arreglos": "Ciro Vega González, Emmanuel León Apolinar",
+      "terminada": false
+    },
+    {
       "idC": "---Cuando Yo Quería Ser Grande (Ciro Vega González)",
       "nombreC": "Cuando Yo Quería Ser Grande",
       "arreglos": "Ciro Vega González",
@@ -28,6 +34,12 @@
       "idC": "---Esperando La Madrugada (Emmanuel León Apolinar)",
       "nombreC": "Esperando La Madrugada",
       "arreglos": "Emmanuel León Apolinar",
+      "terminada": false
+    },
+    {
+      "idC": "---Granada (Osvaldo Daniel Barrera, Emmanuel León Apolinar)",
+      "nombreC": "Granada",
+      "arreglos": "Osvaldo Daniel Barrera, Emmanuel León Apolinar",
       "terminada": false
     },
     {
@@ -52,12 +64,6 @@
       "idC": "Bonita ()",
       "nombreC": "Bonita",
       "arreglos": "",
-      "terminada": true
-    },
-    {
-      "idC": "Chapala (Ciro Vega González, Emmanuel León Apolinar)",
-      "nombreC": "Chapala",
-      "arreglos": "Ciro Vega González, Emmanuel León Apolinar",
       "terminada": true
     },
     {

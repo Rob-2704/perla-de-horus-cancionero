@@ -29,20 +29,6 @@
       "archivo": "--Serenata Huasteca"
     },
     {
-      "idC": "5",
-      "nombreC": "Alma, Corazón Y Vida",
-      "arreglos": "Ciro Vega González",
-      "estado": "revisar",
-      "archivo": "-Alma, Corazón Y Vida (Ciro Vega González)"
-    },
-    {
-      "idC": "6",
-      "nombreC": "Ella",
-      "arreglos": "",
-      "estado": "revisar",
-      "archivo": "-Ella ()"
-    },
-    {
       "idC": "7",
       "nombreC": "Esperando La Madrugada",
       "arreglos": "Emmanuel León Apolinar",
@@ -64,20 +50,6 @@
       "archivo": "-Las Golondrinas (Ciro Vega González)"
     },
     {
-      "idC": "10",
-      "nombreC": "Las Mañanitas",
-      "arreglos": "Ciro Vega González",
-      "estado": "revisar",
-      "archivo": "-Las Mañanitas (Ciro Vega González)"
-    },
-    {
-      "idC": "11",
-      "nombreC": "Los Mirlos",
-      "arreglos": "Ciro Vega González",
-      "estado": "revisar",
-      "archivo": "-Los Mirlos (Ciro Vega González)"
-    },
-    {
       "idC": "12",
       "nombreC": "Adios Amor",
       "arreglos": "Ciro Vega González",
@@ -92,11 +64,25 @@
       "archivo": "Aires Del Mayab (Ciro Vega González)"
     },
     {
+      "idC": "5",
+      "nombreC": "Alma, Corazón Y Vida",
+      "arreglos": "Ciro Vega González",
+      "estado": "terminada",
+      "archivo": "Alma, Corazón Y Vida (Ciro Vega González)"
+    },
+    {
       "idC": "23",
       "nombreC": "Bonita",
       "arreglos": "Joel Carrillo Cuenca, Osvaldo Daniel Barrera",
       "estado": "terminada",
       "archivo": "Bonita (Joel Carrillo Cuenca, Osvaldo Daniel Barrera)"
+    },
+    {
+      "idC": "6",
+      "nombreC": "Ella",
+      "arreglos": "",
+      "estado": "terminada",
+      "archivo": "Ella ()"
     },
     {
       "idC": "15",
@@ -111,6 +97,20 @@
       "arreglos": "Ciro Vega González",
       "estado": "terminada",
       "archivo": "La Malagueña (Ciro Vega González)"
+    },
+    {
+      "idC": "10",
+      "nombreC": "Las Mañanitas",
+      "arreglos": "Ciro Vega González",
+      "estado": "terminada",
+      "archivo": "Las Mañanitas (Ciro Vega González)"
+    },
+    {
+      "idC": "11",
+      "nombreC": "Los Mirlos",
+      "arreglos": "Ciro Vega González",
+      "estado": "terminada",
+      "archivo": "Los Mirlos (Ciro Vega González)"
     },
     {
       "idC": "17",

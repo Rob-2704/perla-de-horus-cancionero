@@ -1,6 +1,6 @@
 (Intro)
-SOLm-REm-LA7-REm SOLm-REm-LA7-REm
-LA7-REm-LA7-REm
+SOLm REm LA7 REm SOLm REm LA7 REm
+LA7 REm LA7 REm
 
            LA7             REm
 Cantan los mirlos de mil colores
@@ -16,8 +16,8 @@ Y se despierta la amada mía
         LA7             REm
 Y se despierta la amada mía
 
-SOLm-REm-LA7-REm SOLm-REm-LA7-REm
-LA7-REm-LA7-REm DO7
+SOLm REm LA7 REm SOLm REm LA7 REm
+LA7 REm LA7 REm DO7
 
               FA-DO7           FA
 ¡Ay! ¿Quién pudiera robarte un beso?
@@ -31,3 +31,6 @@ Cuando parece que estás dormida,
 Sin despertarte mujer querida
           LA7            REm
 Sin despertarte mujer querida
+
+SOLm REm LA7 REm SOLm REm LA7 REm
+LA7 REm LA7 REm-LA7-REm

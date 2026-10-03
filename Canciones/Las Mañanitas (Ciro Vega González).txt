@@ -1,4 +1,6 @@
 (Intro)
+DO
+
 Hoy por ser día de tu santo te las cantamos así...
 
 DO-SOL-RE7-SOL
@@ -28,6 +30,9 @@ Ya la luz del día nos dio
 Levántate de la mañana
      RE7         SOL
 Mira que ya amaneció
+
+DO-SOL-RE7-SOL
+DO-SOL-RE7-SOL
 
    SOL
 Quisiera ser solecito
